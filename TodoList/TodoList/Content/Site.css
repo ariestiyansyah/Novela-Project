@@ -1,4 +1,10 @@
-﻿body {
+﻿ul, li, div, p
+{
+    padding: 0;
+    margin: 0;
+}
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -60,7 +66,38 @@ input[type="checkbox"].input-validation-error {
     font-size: 40px;
     font-weight: bold;
 }
+.main
+{
+    width: 100%;
+}
+.main .title
+{
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #292a47;
+    font-style: italic;
+    width: 100%;
+}
+.main ul li
+{
+    list-style: none;
+}
+.main .row
+{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.main ul li
+{
+    padding: 10px;
+    background-color: #f6f6f6;
+    margin: 5px;
+    border: 1px solid #eaeaea;
+}
+.main .today
+{
 
+}
 /* main css for footer */
 footer
 {

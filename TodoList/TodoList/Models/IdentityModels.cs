@@ -13,5 +13,7 @@ namespace TodoList.Models
             : base("DefaultConnection")
         {
         }
+
+        public System.Data.Entity.DbSet<TodoList.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }
