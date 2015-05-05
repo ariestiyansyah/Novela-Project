@@ -40,3 +40,61 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+/* main css for home */
+.banner
+{
+    width: 100%;
+    background-color: white;
+}
+.banner .welcome-message
+{
+    width: 100%;
+    padding: 230px;
+    padding-top: 180px;
+    color: #292a47;
+    text-align: center;
+}
+.banner .welcome-message p
+{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+/* main css for footer */
+footer
+{
+    text-align: center;
+}
+
+/* bootstrap normalization */
+.navbar
+{
+    background-color: #292a47;
+    border-bottom: 1px dashed #8d7dc8;
+    color: white;
+}
+.navbar-inverse .navbar-brand
+{
+    color: white;
+}
+.navbar-inverse .navbar-nav > li > a
+{
+    color: white;
+}
+.row
+{
+    margin: 0;
+    padding: 0;
+}
+.btn
+{
+    border-radius: 0;
+    padding: 10px 25px;
+
+}
+.btn-success
+{
+    background-color: #466982;
+    border: 1px solid #466982;
+}
