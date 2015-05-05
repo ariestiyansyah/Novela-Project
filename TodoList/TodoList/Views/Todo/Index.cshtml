@@ -3,6 +3,23 @@
 @{
     ViewBag.Title = "Todo";
 }
+<div class="content">
+    <div class="row">
+        <div class="container">
+            <h2>@ViewBag.Title</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container">
+            <div class="main">
+                <div ng-app="">
+                    <p>Name : <input type="text" ng-model="name"></p>
+                    <h1>Hello {{name}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h2>@ViewBag.Title</h2>
+
 
