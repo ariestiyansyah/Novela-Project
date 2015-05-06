@@ -1,11 +1,19 @@
 ﻿@model TodoApp.Models.UserRegistration
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Registration";
 }
 
-<h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("User", "Create", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+<h2>@ViewBag.Title.</h2>
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Congratulation!</strong> @TempData["message"]
+    </div>
+}
+    
+@using (Html.BeginForm("Create", "User", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>
