@@ -15,16 +15,6 @@ namespace TodoApp.Controllers
 {
     public class UserController : Controller
     {
-        public UserController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
-        {
-        }
-
-        public UserController(UserManager<ApplicationUser> userManager)
-        {
-            UserManager = userManager;
-        }
-        public UserManager<ApplicationUser> UserManager { get; private set; }
         TodoAppDataContext db = new TodoAppDataContext();
         //
         // GET: /User/
@@ -88,6 +78,7 @@ namespace TodoApp.Controllers
                 {
                     string id = user.id + "";
                     Response.Cookies["userId"].Value = id;
+                    Response.Cookies["userName"].Value = model.Username;
                     Response.Redirect("~/Home");
                 }
                 else
@@ -104,11 +95,9 @@ namespace TodoApp.Controllers
             Response.Redirect("~/Home");
             return View();
         }
-        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        public ActionResult Success()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+            return View();
         }
     }
 }

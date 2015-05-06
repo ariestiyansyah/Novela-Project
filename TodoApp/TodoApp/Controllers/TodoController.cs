@@ -28,10 +28,18 @@ namespace TodoApp.Controllers
         // GET: /Todo/Create
         public ActionResult Create()
         {
-            int userId = Convert.ToInt32(Request.Cookies["UserId"].Value);
-            List<Todo> todos = db.Todos.Where(m => m.idUser == userId).ToList();
-            ViewData["todo"] = todos;
-            return View();
+            if(Request.Cookies["UserId"] != null)
+            {
+                int userId = Convert.ToInt32(Request.Cookies["UserId"].Value);
+                List<Todo> todos = db.Todos.Where(m => m.idUser == userId).ToList();
+                ViewData["todo"] = todos;
+                return View();
+            }
+            else
+            {
+                Response.Redirect("~/Home");
+                return View();
+            }
         }
 
         //

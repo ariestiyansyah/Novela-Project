@@ -4,17 +4,13 @@
 }
 
 /* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.body-content, .row, .p, .div {
+    padding: 0;
+    margin: 0;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
+
 
 /* styles for validation helpers */
 .field-validation-error {
@@ -42,6 +38,53 @@ input[type="checkbox"].input-validation-error {
 }
 
 /* main css for home */
+.banner
+{
+    width: 100%;
+    background-color: white;
+    padding: 150px;
+    text-align: center;
+}
+.banner h2
+{
+    font-weight: bold;
+    font-size: 45px;
+    color: #262a52;
+}
+.banner a
+{
+    margin-top: 20px;
+    padding: 7px 30px;
+}
+
+
+/* main css for user (registration, login) */
+.user
+{
+    width: 100%;
+    text-align: center;
+}
+.user .top
+{
+    padding: 25px;
+}
+.user .main
+{
+    padding: 50px 0px;
+}
+.user table
+{
+    text-align: left;
+}
+.user .main input
+{
+    text-align:center;
+}
+.user input
+{
+    width: 100%;
+}
+
 
 /* main css for footer */
 footer
@@ -49,7 +92,17 @@ footer
     text-align: center;
 }
 
+
 /* normalize bootstrap */
+.row, .navbar, .navbar-inverse, .navbar-fixed-top, .form-control
+{
+    padding: 0;
+    margin: 0;
+}
+.form-control
+{
+    border-radius: 0;
+}
 .navbar
 {
     background-color: #262a52;
@@ -61,4 +114,8 @@ footer
 .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand
 {
     color: white;
+}
+.btn
+{
+    border-radius: 0;
 }
