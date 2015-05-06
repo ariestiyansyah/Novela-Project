@@ -31,11 +31,6 @@ namespace TodoApp.Models
             get;
             set; 
         }
-
-        public void auth(User user)
-        {       
-            
-        }
     }
     public class UserRegistration
     {

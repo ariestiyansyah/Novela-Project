@@ -22,7 +22,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Todo", "Index", "Todo")</li>
+                    @if(Request.Cookies["UserId"]!=null)
+                    {
+                        <li>@Html.ActionLink("Todo", "Create", "Todo")</li>
+                    }                 
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

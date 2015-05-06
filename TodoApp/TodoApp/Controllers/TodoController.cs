@@ -8,17 +8,12 @@ namespace TodoApp.Controllers
 {
     public class TodoController : Controller
     {
+        TodoAppDataContext db = new TodoAppDataContext();
         //
         // GET: /Todo/
+
         public ActionResult Index()
         {
-            TodoAppDataContext db = new TodoAppDataContext();
-            int newId = db.Todos.Count()+1;
-            Todo hehe = new Todo();
-            hehe.id = newId;
-            hehe.description = "semoga cepet sehat";
-            db.Todos.InsertOnSubmit(hehe);
-            db.SubmitChanges();
             return View();
         }
 
@@ -33,7 +28,9 @@ namespace TodoApp.Controllers
         // GET: /Todo/Create
         public ActionResult Create()
         {
-            
+            int userId = Convert.ToInt32(Request.Cookies["UserId"].Value);
+            List<Todo> todos = db.Todos.Where(m => m.idUser == userId).ToList();
+            ViewData["todo"] = todos;
             return View();
         }
 
@@ -45,8 +42,15 @@ namespace TodoApp.Controllers
             try
             {
                 // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                Todo todo = new Todo();
+                todo.id = db.Todos.Count() + 1;
+                todo.idUser = Convert.ToInt32(Request.Cookies["UserId"].Value);
+                todo.description = collection["Description"];
+                todo.date = DateTime.Now.AddDays(0);
+                todo.status = "0";
+                db.Todos.InsertOnSubmit(todo);
+                db.SubmitChanges();
+                return RedirectToAction("Create");
             }
             catch
             {
@@ -69,7 +73,12 @@ namespace TodoApp.Controllers
             try
             {
                 // TODO: Add update logic here
-
+                int newId = db.Todos.Count() + 1;
+                Todo hehe = new Todo();
+                hehe.id = newId;
+                hehe.description = "semoga cepet sehat";
+                db.Todos.InsertOnSubmit(hehe);
+                db.SubmitChanges();
                 return RedirectToAction("Index");
             }
             catch

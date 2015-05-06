@@ -1,16 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TodoApp" Class="TodoAppDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=NOVELASPALO\SQLEXPRESS;Initial Catalog=TodoApp;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="TodoAppConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Todos" Member="Todos">
-    <Type Name="Todo">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Users" Member="Users">
     <Type Name="User">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="username" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="User_Todo" Member="Todos" ThisKey="id" OtherKey="idUser" Type="Todo" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Todos" Member="Todos">
+    <Type Name="Todo">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="status" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="idUser" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="User_Todo" Member="User" ThisKey="idUser" OtherKey="id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

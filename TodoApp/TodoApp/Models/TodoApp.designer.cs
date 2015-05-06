@@ -30,12 +30,12 @@ namespace TodoApp.Models
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertTodo(Todo instance);
-    partial void UpdateTodo(Todo instance);
-    partial void DeleteTodo(Todo instance);
     partial void InsertUser(User instance);
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
+    partial void InsertTodo(Todo instance);
+    partial void UpdateTodo(Todo instance);
+    partial void DeleteTodo(Todo instance);
     #endregion
 		
 		public TodoAppDataContext() : 
@@ -68,14 +68,6 @@ namespace TodoApp.Models
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Todo> Todos
-		{
-			get
-			{
-				return this.GetTable<Todo>();
-			}
-		}
-		
 		public System.Data.Linq.Table<User> Users
 		{
 			get
@@ -83,90 +75,12 @@ namespace TodoApp.Models
 				return this.GetTable<User>();
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Todos")]
-	public partial class Todo : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _id;
-		
-		private string _description;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(int value);
-    partial void OnidChanged();
-    partial void OndescriptionChanging(string value);
-    partial void OndescriptionChanged();
-    #endregion
-		
-		public Todo()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int id
+		public System.Data.Linq.Table<Todo> Todos
 		{
 			get
 			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="VarChar(MAX)")]
-		public string description
-		{
-			get
-			{
-				return this._description;
-			}
-			set
-			{
-				if ((this._description != value))
-				{
-					this.OndescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._description = value;
-					this.SendPropertyChanged("description");
-					this.OndescriptionChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				return this.GetTable<Todo>();
 			}
 		}
 	}
@@ -183,6 +97,8 @@ namespace TodoApp.Models
 		
 		private string _password;
 		
+		private EntitySet<Todo> _Todos;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -197,6 +113,7 @@ namespace TodoApp.Models
 		
 		public User()
 		{
+			this._Todos = new EntitySet<Todo>(new Action<Todo>(this.attach_Todos), new Action<Todo>(this.detach_Todos));
 			OnCreated();
 		}
 		
@@ -256,6 +173,230 @@ namespace TodoApp.Models
 					this._password = value;
 					this.SendPropertyChanged("password");
 					this.OnpasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Todo", Storage="_Todos", ThisKey="id", OtherKey="idUser")]
+		public EntitySet<Todo> Todos
+		{
+			get
+			{
+				return this._Todos;
+			}
+			set
+			{
+				this._Todos.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Todos(Todo entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Todos(Todo entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Todos")]
+	public partial class Todo : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _id;
+		
+		private string _description;
+		
+		private string _status;
+		
+		private System.Nullable<System.DateTime> _date;
+		
+		private System.Nullable<int> _idUser;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(int value);
+    partial void OnidChanged();
+    partial void OndescriptionChanging(string value);
+    partial void OndescriptionChanged();
+    partial void OnstatusChanging(string value);
+    partial void OnstatusChanged();
+    partial void OndateChanging(System.Nullable<System.DateTime> value);
+    partial void OndateChanged();
+    partial void OnidUserChanging(System.Nullable<int> value);
+    partial void OnidUserChanged();
+    #endregion
+		
+		public Todo()
+		{
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="VarChar(MAX)")]
+		public string description
+		{
+			get
+			{
+				return this._description;
+			}
+			set
+			{
+				if ((this._description != value))
+				{
+					this.OndescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._description = value;
+					this.SendPropertyChanged("description");
+					this.OndescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="NChar(10)")]
+		public string status
+		{
+			get
+			{
+				return this._status;
+			}
+			set
+			{
+				if ((this._status != value))
+				{
+					this.OnstatusChanging(value);
+					this.SendPropertyChanging();
+					this._status = value;
+					this.SendPropertyChanged("status");
+					this.OnstatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_date", DbType="Date")]
+		public System.Nullable<System.DateTime> date
+		{
+			get
+			{
+				return this._date;
+			}
+			set
+			{
+				if ((this._date != value))
+				{
+					this.OndateChanging(value);
+					this.SendPropertyChanging();
+					this._date = value;
+					this.SendPropertyChanged("date");
+					this.OndateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_idUser", DbType="Int")]
+		public System.Nullable<int> idUser
+		{
+			get
+			{
+				return this._idUser;
+			}
+			set
+			{
+				if ((this._idUser != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnidUserChanging(value);
+					this.SendPropertyChanging();
+					this._idUser = value;
+					this.SendPropertyChanged("idUser");
+					this.OnidUserChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Todo", Storage="_User", ThisKey="idUser", OtherKey="id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Todos.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Todos.Add(this);
+						this._idUser = value.id;
+					}
+					else
+					{
+						this._idUser = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("User");
 				}
 			}
 		}
