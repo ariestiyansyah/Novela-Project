@@ -1,27 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
 using TodoApp.Models;
+using System.Web.WebPages;
+
 namespace TodoApp.Controllers
 {
     public class UserController : Controller
     {
+        public UserController()
+            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+        {
+        }
+
+        public UserController(UserManager<ApplicationUser> userManager)
+        {
+            UserManager = userManager;
+        }
+        public UserManager<ApplicationUser> UserManager { get; private set; }
+        TodoAppDataContext db = new TodoAppDataContext();
         //
         // GET: /User/
         public ActionResult Index()
         {
             return View();
         }
-
-        //
-        // GET: /User/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         //
         // GET: /User/Create
         public ActionResult Create()
@@ -39,14 +49,14 @@ namespace TodoApp.Controllers
                 // TODO: Add insert logic here
                 if (ModelState.IsValid)
                 {
-                    TodoAppDataContext db = new TodoAppDataContext();
                     User register = new User();
+
                     register.id = db.Users.Count() + 1;
                     register.username = model.Username;
-                    register.password = model.Password;
-                    
+                    register.password = model.Password;                    
                     db.Users.InsertOnSubmit(register);
-                    db.SubmitChanges(); 
+                    db.SubmitChanges();
+
                     TempData["message"] = "Registration Success";
                 }
 
@@ -57,53 +67,48 @@ namespace TodoApp.Controllers
                 return View();
             }
         }
-
-        //
-        // GET: /User/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Login()
         {
             return View();
         }
-
-        //
-        // POST: /User/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        private IAuthenticationManager AuthenticationManager
         {
-            try
+            get
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
+                return HttpContext.GetOwinContext().Authentication;
             }
         }
-
-        //
-        // GET: /User/Delete/5
-        public ActionResult Delete(int id)
+        [HttpPost]
+        public ActionResult Login(UserModels model)
         {
+            if(ModelState.IsValid)
+            {
+                User user = db.Users.Where(u => u.username == model.Username && u.password == model.Password).FirstOrDefault();
+                if (user != null)
+                {
+                    string id = user.id + "";
+                    Response.Cookies["userId"].Value = id;
+                    Response.Redirect("~/Home");
+                }
+                else
+                {
+                    TempData["message"] = "Username or password invalid";
+                    return View();
+                }
+            }
             return View();
         }
-
-        //
-        // POST: /User/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Logout()
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            Response.Cookies["userId"].Expires = DateTime.Now.AddDays(-1);   
+            Response.Redirect("~/Home");
+            return View();
+        }
+        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
     }
 }

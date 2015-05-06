@@ -15,6 +15,23 @@ namespace TodoApp.Models
 {
     public class UserModels
     {
+        [Required]
+        [Display(Name = "User name")]
+        public string Username 
+        { 
+            get;
+            set;
+        }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password 
+        { 
+            get;
+            set; 
+        }
+
         public void auth(User user)
         {       
             
@@ -23,7 +40,7 @@ namespace TodoApp.Models
     public class UserRegistration
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "Username")]
         public string Username
         {
             set;
